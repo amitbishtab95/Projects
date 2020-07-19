@@ -1,7 +1,9 @@
 Predict Who Will Survive And Who Will Die
  		
 Name -AMIT BISHT
+
 U. Roll No-2012485
+
 Sec-B (07)
 
 PROBLEM STATEMENT: -  
