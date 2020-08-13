@@ -220,3 +220,40 @@ test_data['LoanAmount'].fillna(train_data['LoanAmount'].median(), inplace=True)
 train_data['LoanAmount_log'] = np.log(train_data['LoanAmount']) 
 train_data['LoanAmount_log'].hist(bins=20) 
 test_data['LoanAmount_log'] = np.log(test_data['LoanAmount'])
+
+#droping loanId not required
+train_data=train_data.drop('Loan_ID',axis=1)
+test_data=test_data.drop('Loan_ID',axis=1)
+
+X = train_data.drop('Loan_Status',1) 
+y = train_data.Loan_Status
+
+X=pd.get_dummies(X) 
+train_data=pd.get_dummies(train_data) 
+test_data=pd.get_dummies(test_data)
+
+from sklearn.model_selection import train_test_split
+x_train, x_cv, y_train, y_cv = train_test_split(X,y, test_size =0.3)
+
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score
+model = LogisticRegression() 
+model.fit(x_train, y_train)
+
+pred_cv = model.predict(x_cv)
+
+#Let us calculate how accurate our predictions are by calculating the accuracy.
+accuracy_score(y_cv,pred_cv)
+
+#Let’s make predictions for the test dataset.
+
+pred_test = model.predict(test_data)
+
+submission=pd.DataFrame()
+
+submission['Loan_ID']=test_original['Loan_ID']
+submission["Loan_Status"]=pred_test
+submission['Loan_Status'].replace(0, 'N',inplace=True) 
+submission['Loan_Status'].replace(1, 'Y',inplace=True)
+pd.DataFrame(submission, columns=['Loan_ID','Loan_Status']).to_csv('logistic.csv')
+
