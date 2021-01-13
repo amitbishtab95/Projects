@@ -1,2 +1,2 @@
 # Projects
-my projects
+My projects on Machine Learning
